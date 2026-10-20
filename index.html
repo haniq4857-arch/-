@@ -1,0 +1,318 @@
+<!DOCTYPE html>
+<html lang="ar" dir="rtl">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>عيادة الدكتورة/ نجلاء الشرجبي | طب أسنان</title>
+    <!-- Tailwind CSS (للتصميم السريع) -->
+    <script src="https://cdn.tailwindcss.com"></script>
+    <!-- خط Cairo العربي -->
+    <link href="https://fonts.googleapis.com/css2?family=Cairo:wght@400;600;700&display=swap" rel="stylesheet">
+    <!-- أيقونات Lucide -->
+    <script src="https://unpkg.com/lucide@latest"></script>
+    <style>
+        body { font-family: 'Cairo', sans-serif; scroll-behavior: smooth; }
+        /* تأثير النبض لزر الواتساب العائم */
+        @keyframes pulse-ring { 0% { transform: scale(0.8); opacity: 0.5; } 100% { transform: scale(1.3); opacity: 0; } }
+        .pulse-ring::before { content: ''; position: absolute; inset: 0; border-radius: 50%; background-color: #22c55e; animation: pulse-ring 2s infinite; z-index: -1; }
+        /* إخفاء شريط التمرير في النوافذ المنبثقة */
+        ::-webkit-scrollbar { width: 8px; }
+        ::-webkit-scrollbar-thumb { background: #06b6d4; border-radius: 4px; }
+    </style>
+</head>
+<body class="bg-gray-50 text-gray-800 antialiased">
+
+    <!-- 🔒 شاشة القفل (تظهر فقط إذا تم تفعيل الحماية بكلمة مرور) -->
+    <div id="lockScreen" class="fixed inset-0 bg-white z-[9999] flex flex-col items-center justify-center hidden">
+        <div class="text-center p-8 bg-gray-50 rounded-2xl shadow-sm max-w-md w-full border border-gray-200">
+            <i data-lucide="lock" class="w-16 h-16 text-cyan-500 mx-auto mb-4"></i>
+            <h2 class="text-2xl font-bold mb-4 text-gray-800">الموقع محمي بكلمة مرور</h2>
+            <input type="password" id="sitePasswordInput" class="border border-gray-300 p-3 rounded-lg mb-4 text-center w-full focus:outline-none focus:ring-2 focus:ring-cyan-500" placeholder="أدخل كلمة المرور">
+            <button onclick="checkPassword()" class="w-full bg-cyan-500 hover:bg-cyan-600 text-white px-6 py-3 rounded-lg font-bold transition-colors">دخول</button>
+            <p id="errorMsg" class="text-red-500 mt-3 text-sm hidden">كلمة المرور غير صحيحة. حاول مرة أخرى.</p>
+        </div>
+    </div>
+
+    <!-- 🌐 محتوى الموقع الرئيسي -->
+    <div id="mainContent" class="hidden">
+        
+        <!-- الهيدر -->
+        <header class="bg-white shadow-sm sticky top-0 z-50 border-b border-gray-100">
+            <div class="container mx-auto px-4 py-3 flex justify-between items-center">
+                <div class="flex items-center gap-3">
+                    <div class="w-14 h-14 bg-white rounded-full flex items-center justify-center p-1 border border-gray-100 shadow-sm">
+                        <!-- شعار العيادة (يمكنك استبدال الرابط بشعارك الحقيقي) -->
+                        <img src="https://via.placeholder.com/150/ffffff/00bcd4?text=Logo" alt="شعار العيادة" class="w-full h-full object-contain rounded-full">
+                    </div>
+                    <div>
+                        <h1 class="text-lg md:text-xl font-bold text-gray-800">عيادة الدكتورة/ نجلاء الشرجبي</h1>
+                        <p class="text-xs text-cyan-600 font-semibold">طب أسنان تجميلي وعلاجي</p>
+                    </div>
+                </div>
+                <div class="hidden md:flex items-center gap-4">
+                    <a href="#" id="headerPhone" class="text-gray-600 hover:text-cyan-500 font-medium transition-colors">اتصل بنا</a>
+                    <a href="#booking" class="bg-cyan-500 hover:bg-cyan-600 text-white px-6 py-2 rounded-full font-medium transition-colors">احجز الآن</a>
+                </div>
+            </div>
+        </header>
+
+        <!-- قسم الترحيب (Hero) -->
+        <section class="bg-gradient-to-b from-cyan-50 to-white py-20 text-center px-4">
+            <div class="max-w-3xl mx-auto">
+                <h2 class="text-4xl md:text-5xl font-bold text-gray-900 mb-6 leading-tight">ابتسامة صحية تبدأ بزيارة واحدة</h2>
+                <p class="text-lg text-gray-600 mb-10">نقدم لك ولعائلتك أفضل رعاية في طب الأسنان بأحدث التقنيات وبأيدي فريق متخصص.</p>
+                <div class="flex flex-col sm:flex-row justify-center gap-4">
+                    <a href="#" id="heroWhatsappBtn" target="_blank" class="bg-green-500 hover:bg-green-600 text-white px-8 py-4 rounded-full font-bold text-lg shadow-lg transition-transform hover:scale-105 flex items-center justify-center gap-2">
+                        <i data-lucide="message-circle" class="w-6 h-6"></i>
+                        <span>احجز عبر واتساب</span>
+                    </a>
+                    <a href="#services" class="bg-white border-2 border-cyan-500 text-cyan-600 px-8 py-4 rounded-full font-bold text-lg hover:bg-cyan-50 transition-colors">تعرف على خدماتنا</a>
+                </div>
+            </div>
+        </section>
+
+        <!-- شريط الثقة -->
+        <div class="bg-cyan-500 text-white py-4">
+            <div class="container mx-auto px-4 flex flex-wrap justify-center gap-6 md:gap-12 text-sm md:text-base font-semibold">
+                <span class="flex items-center gap-2"><i data-lucide="shield-check" class="w-5 h-5"></i> تعقيم كامل</span>
+                <span class="flex items-center gap-2"><i data-lucide="clock" class="w-5 h-5"></i> مواعيد مرنة</span>
+                <span class="flex items-center gap-2"><i data-lucide="award" class="w-5 h-5"></i> أطباء معتمدون</span>
+                <span class="flex items-center gap-2"><i data-lucide="credit-card" class="w-5 h-5"></i> تقسيط متاح</span>
+            </div>
+        </div>
+
+        <!-- الخدمات -->
+        <section id="services" class="py-20 bg-white">
+            <div class="container mx-auto px-4">
+                <h3 class="text-3xl font-bold text-center text-gray-800 mb-12">خدماتنا الطبية</h3>
+                <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-6">
+                    <!-- خدمة 1 -->
+                    <div class="bg-gray-50 rounded-2xl p-6 text-center hover:shadow-lg transition-shadow border border-gray-100">
+                        <div class="w-16 h-16 bg-cyan-100 rounded-full flex items-center justify-center mx-auto mb-4">
+                            <i data-lucide="sparkles" class="w-8 h-8 text-cyan-500"></i>
+                        </div>
+                        <h4 class="text-xl font-bold text-gray-800 mb-2">تنظيف وتلميع</h4>
+                        <p class="text-cyan-600 font-semibold">تبدأ من 50$</p>
+                    </div>
+                    <!-- خدمة 2 -->
+                    <div class="bg-gray-50 rounded-2xl p-6 text-center hover:shadow-lg transition-shadow border border-gray-100">
+                        <div class="w-16 h-16 bg-cyan-100 rounded-full flex items-center justify-center mx-auto mb-4">
+                            <i data-lucide="activity" class="w-8 h-8 text-cyan-500"></i>
+                        </div>
+                        <h4 class="text-xl font-bold text-gray-800 mb-2">حشوات تجميلية</h4>
+                        <p class="text-cyan-600 font-semibold">تبدأ من 40$</p>
+                    </div>
+                    <!-- خدمة 3 -->
+                    <div class="bg-gray-50 rounded-2xl p-6 text-center hover:shadow-lg transition-shadow border border-gray-100">
+                        <div class="w-16 h-16 bg-cyan-100 rounded-full flex items-center justify-center mx-auto mb-4">
+                            <i data-lucide="smile" class="w-8 h-8 text-cyan-500"></i>
+                        </div>
+                        <h4 class="text-xl font-bold text-gray-800 mb-2">تقويم أسنان</h4>
+                        <p class="text-cyan-600 font-semibold">حسب الحالة</p>
+                    </div>
+                    <!-- خدمة 4 -->
+                    <div class="bg-gray-50 rounded-2xl p-6 text-center hover:shadow-lg transition-shadow border border-gray-100">
+                        <div class="w-16 h-16 bg-cyan-100 rounded-full flex items-center justify-center mx-auto mb-4">
+                            <i data-lucide="sun" class="w-8 h-8 text-cyan-500"></i>
+                        </div>
+                        <h4 class="text-xl font-bold text-gray-800 mb-2">تبييض بالليزر</h4>
+                        <p class="text-cyan-600 font-semibold">تبدأ من 150$</p>
+                    </div>
+                </div>
+            </div>
+        </section>
+
+        <!-- قسم الحجز السريع -->
+        <section id="booking" class="py-20 bg-cyan-500 text-white text-center px-4">
+            <h3 class="text-3xl font-bold mb-4">جاهز لابتسامة أفضل؟</h3>
+            <p class="mb-8 text-lg">تواصل معنا الآن لحجز موعدك وتحديد الوقت المناسب لك.</p>
+            <a href="#" id="ctaWhatsappBtn" target="_blank" class="bg-white text-cyan-600 px-8 py-4 rounded-full font-bold text-lg hover:bg-gray-100 transition-colors inline-block shadow-lg">احجز موعدك الآن</a>
+        </section>
+
+        <!-- الفوتر (أسفل الصفحة) -->
+        <footer class="bg-gray-900 text-gray-300 py-12">
+            <div class="container mx-auto px-4">
+                <div class="grid grid-cols-1 md:grid-cols-3 gap-8 mb-8">
+                    <div>
+                        <h4 class="text-white text-lg font-bold mb-4">عيادة الدكتورة/ نجلاء الشرجبي</h4>
+                        <div class="flex items-start gap-2 mb-3">
+                            <i data-lucide="map-pin" class="w-5 h-5 text-cyan-400 mt-1 shrink-0"></i>
+                            <p>شارع حدة، أمام مستشفى...، صنعاء</p>
+                        </div>
+                        <div class="flex items-center gap-2 mb-3">
+                            <i data-lucide="clock" class="w-5 h-5 text-cyan-400 shrink-0"></i>
+                            <p>السبت - الخميس: 9:00 ص - 5:00 م</p>
+                        </div>
+                        <div class="flex items-center gap-2">
+                            <i data-lucide="phone" class="w-5 h-5 text-cyan-400 shrink-0"></i>
+                            <a href="#" id="footerPhone" class="hover:text-white transition-colors" dir="ltr">+967771234567</a>
+                        </div>
+                    </div>
+                    <div class="md:col-span-2">
+                        <div class="w-full h-48 rounded-xl overflow-hidden shadow-lg">
+                            <iframe src="https://www.google.com/maps?q=15.3694,44.1910&hl=ar&z=15&output=embed" width="100%" height="100%" style="border:0" loading="lazy"></iframe>
+                        </div>
+                    </div>
+                </div>
+                <div class="border-t border-gray-800 pt-6 text-center text-sm">
+                    <p>© <span id="currentYear"></span> عيادة الدكتورة/ نجلاء الشرجبي — جميع الحقوق محفوظة.</p>
+                    <!-- حقوق الصانع (التوقيع) -->
+                    <p class="mt-2 text-gray-500">تم صنع هذا الموقع بواسطة <a href="#" id="developerCreditLink" class="text-cyan-400 hover:text-cyan-300 font-semibold transition-colors">الدكتور/هاني المخرفي — أكبر خبير صانع مواقع</a></p>
+                </div>
+            </div>
+        </footer>
+
+        <!-- زر الواتساب العائم -->
+        <a href="#" id="floatingWhatsappBtn" target="_blank" class="fixed bottom-6 right-6 bg-green-500 text-white p-4 rounded-full shadow-2xl hover:bg-green-600 transition-transform hover:scale-110 z-50 flex items-center justify-center pulse-ring">
+            <i data-lucide="message-circle" class="w-8 h-8"></i>
+        </a>
+    </div>
+
+    <!-- ⚙️ لوحة التحكم السرية (تظهر عند إضافة ?admin لرابط الموقع) -->
+    <div id="adminModal" class="fixed inset-0 bg-black bg-opacity-60 z-[10000] flex items-center justify-center hidden backdrop-blur-sm">
+        <div class="bg-white rounded-xl shadow-2xl p-6 w-full max-w-md mx-4">
+            <h2 class="text-2xl font-bold mb-4 text-gray-800 border-b pb-2">إعدادات الموقع</h2>
+            <form id="settingsForm" onsubmit="saveSettings(event)">
+                <div class="mb-4">
+                    <label class="block text-sm font-medium mb-1 text-gray-700">رقم الواتساب (بدون +)</label>
+                    <input type="text" id="settingWhatsapp" class="w-full border p-2 rounded-lg focus:ring-2 focus:ring-cyan-500 focus:outline-none" required>
+                </div>
+                <div class="mb-4">
+                    <label class="block text-sm font-medium mb-1 text-gray-700">نص رسالة الواتساب</label>
+                    <input type="text" id="settingMessage" class="w-full border p-2 rounded-lg focus:ring-2 focus:ring-cyan-500 focus:outline-none" required>
+                </div>
+                <div class="mb-4">
+                    <label class="block text-sm font-medium mb-1 text-gray-700">حالة الموقع</label>
+                    <select id="settingMode" class="w-full border p-2 rounded-lg focus:ring-2 focus:ring-cyan-500 focus:outline-none">
+                        <option value="public">عام (مفتوح للجميع)</option>
+                        <option value="password">محمي بكلمة مرور</option>
+                    </select>
+                </div>
+                <div class="mb-4">
+                    <label class="block text-sm font-medium mb-1 text-gray-700">كلمة مرور الموقع</label>
+                    <input type="text" id="settingPassword" class="w-full border p-2 rounded-lg focus:ring-2 focus:ring-cyan-500 focus:outline-none" placeholder="اتركه فارغاً إذا لم ترد تغييره">
+                </div>
+                <div class="flex justify-end gap-2 mt-6">
+                    <button type="button" onclick="closeAdmin()" class="px-4 py-2 text-gray-600 hover:bg-gray-100 rounded-lg transition-colors">إلغاء</button>
+                    <button type="submit" class="px-6 py-2 bg-cyan-500 text-white rounded-lg hover:bg-cyan-600 transition-colors font-bold">حفظ الإعدادات</button>
+                </div>
+            </form>
+        </div>
+    </div>
+
+    <!-- 🧠 كود الجافاسكريبت (المنطق) -->
+    <script>
+        // تفعيل الأيقونات
+        lucide.createIcons();
+
+        // تعيين السنة الحالية تلقائياً في الفوتر
+        document.getElementById('currentYear').textContent = new Date().getFullYear();
+
+        // الإعدادات الافتراضية (تُحفظ في المتصفح LocalStorage)
+        const defaultSettings = {
+            whatsapp: "967771234567",
+            message: "مرحباً، أريد حجز موعد في عيادة الدكتورة نجلاء",
+            mode: "public", // 'public' أو 'password'
+            password: "clinic2026",
+            developerText: "الدكتور/هاني المخرفي — أكبر خبير صانع مواقع",
+            developerUrl: "#" // ضع رابط حسابك هنا
+        };
+
+        // تحميل الإعدادات المحفوظة أو استخدام الافتراضية
+        let currentSettings = JSON.parse(localStorage.getItem('clinicSettings')) || defaultSettings;
+
+        // تطبيق الإعدادات على عناصر الموقع
+        function applySettings() {
+            const waUrl = `https://wa.me/${currentSettings.whatsapp}?text=${encodeURIComponent(currentSettings.message)}`;
+            
+            // تحديث روابط الواتساب
+            document.getElementById('heroWhatsappBtn').href = waUrl;
+            document.getElementById('ctaWhatsappBtn').href = waUrl;
+            document.getElementById('floatingWhatsappBtn').href = waUrl;
+            
+            // تحديث أرقام الهاتف
+            document.getElementById('headerPhone').href = `tel:+${currentSettings.whatsapp}`;
+            document.getElementById('footerPhone').href = `tel:+${currentSettings.whatsapp}`;
+            document.getElementById('footerPhone').textContent = `+${currentSettings.whatsapp}`;
+
+            // تحديث توقيع الصانع
+            document.getElementById('developerCreditLink').textContent = currentSettings.developerText;
+            document.getElementById('developerCreditLink').href = currentSettings.developerUrl;
+        }
+
+        // فحص حالة الحماية (كلمة المرور)
+        function checkSiteMode() {
+            if (currentSettings.mode === 'password') {
+                const isAuthorized = localStorage.getItem('clinicAuth') === 'true';
+                if (!isAuthorized) {
+                    document.getElementById('lockScreen').classList.remove('hidden');
+                    document.getElementById('mainContent').classList.add('hidden');
+                } else {
+                    document.getElementById('lockScreen').classList.add('hidden');
+                    document.getElementById('mainContent').classList.remove('hidden');
+                }
+            } else {
+                document.getElementById('lockScreen').classList.add('hidden');
+                document.getElementById('mainContent').classList.remove('hidden');
+            }
+        }
+
+        // التحقق من كلمة المرور
+        function checkPassword() {
+            const input = document.getElementById('sitePasswordInput').value;
+            if (input === currentSettings.password) {
+                localStorage.setItem('clinicAuth', 'true');
+                checkSiteMode();
+            } else {
+                document.getElementById('errorMsg').classList.remove('hidden');
+            }
+        }
+
+        // فتح لوحة التحكم (تظهر عند إضافة ?admin لرابط الموقع)
+        function openAdmin() {
+            document.getElementById('settingWhatsapp').value = currentSettings.whatsapp;
+            document.getElementById('settingMessage').value = currentSettings.message;
+            document.getElementById('settingMode').value = currentSettings.mode;
+            document.getElementById('settingPassword').value = ""; 
+            document.getElementById('adminModal').classList.remove('hidden');
+        }
+
+        // إغلاق لوحة التحكم
+        function closeAdmin() {
+            document.getElementById('adminModal').classList.add('hidden');
+            window.history.pushState({}, '', window.location.pathname);
+        }
+
+        // حفظ الإعدادات الجديدة
+        function saveSettings(e) {
+            e.preventDefault();
+            currentSettings.whatsapp = document.getElementById('settingWhatsapp').value;
+            currentSettings.message = document.getElementById('settingMessage').value;
+            currentSettings.mode = document.getElementById('settingMode').value;
+            
+            const newPassword = document.getElementById('settingPassword').value;
+            if (newPassword.trim() !== "") {
+                currentSettings.password = newPassword;
+            }
+
+            localStorage.setItem('clinicSettings', JSON.stringify(currentSettings));
+            applySettings();
+            checkSiteMode();
+            closeAdmin();
+            alert("تم حفظ الإعدادات بنجاح!");
+        }
+
+        // التشغيل الأولي عند تحميل الصفحة
+        window.onload = () => {
+            applySettings();
+            checkSiteMode();
+
+            // التحقق مما إذا كان الرابط يحتوي على ?admin
+            const urlParams = new URLSearchParams(window.location.search);
+            if (urlParams.has('admin')) {
+                openAdmin();
+            }
+        };
+    </script>
+</body>
+</html>
